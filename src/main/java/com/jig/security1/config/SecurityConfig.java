@@ -29,7 +29,17 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()                    // 위 경로가 아닌 요청은 로그인 페이지로 이동시키고
                 .loginPage("/loginForm")        // 로그인 페이지는 이 경로로 하겠다.
-                .loginProcessingUrl("/login")    // 이 경로가 호출되면 시큐리티가 낚아채서 대신 로그인을 진행한다.
-                .defaultSuccessUrl("/");        // /loginForm 으로 들어와서 정상 로그인 후 이동되는 경로 ( 다른 경로로 들어와서 로그인 한 경우에는 들어온 경로로 callback 한다)
+                .loginProcessingUrl("/login")   // 이 경로가 호출되면 시큐리티가 낚아채서 대신 로그인을 진행한다.
+                .defaultSuccessUrl("/")         // /loginForm 으로 들어와서 정상 로그인 후 이동되는 경로 ( 다른 경로로 들어와서 로그인 한 경우에는 들어온 경로로 callback 한다)
+                .and()
+                .oauth2Login()                  // OAuth2기반의 로그인인 경우
+                .loginPage("/loginForm")        // 인증이 필요한 URL에 접근하면 /loginForm으로 이동
+        ;
+        // TODO: 로그인 후처리 필요
+
+//                .authorizationEndpoint()
+//                .baseUri("/login/oauth2/authorization");
+
+
     }
 }

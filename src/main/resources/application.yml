@@ -14,11 +14,11 @@ spring:
     username: jig123
     password: root
 
-# mustache를 의존하겠다고 설정해두면 기본으로 경로가 아래와 같이 prefix, suffix가 설정된다.
-#  mvc:
-#    view:
-#      prefix: /templates/
-#      suffix: .mustache
+  # mustache를 의존하겠다고 설정해두면 기본으로 경로가 아래와 같이 prefix, suffix가 설정된다.
+  #  mvc:
+  #    view:
+  #      prefix: /templates/
+  #      suffix: .mustache
 
   jpa:
     hibernate:
@@ -27,6 +27,7 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
 
+  #참고 - https://docs.spring.io/spring-security/site/docs/5.2.12.RELEASE/reference/html/oauth2.html
   security:
     oauth2:
       client:
@@ -34,7 +35,7 @@ spring:
           google: # /oauth2/authorization/google 이 주소를 동작하게 한다.
             client-id: 값 필요
             client-secret: 값 필요
-            scope:
+            scope: # scope("openid", "profile", "email", "address", "phone")
               - email
               - profile
 

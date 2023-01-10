@@ -1,6 +1,9 @@
 package com.jig.security1.controller;
 
 import com.jig.security1.model.User;
+import com.jig.security1.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,6 +11,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller // view를 리턴
 public class IndexController {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     // localhost:8080
     // localhost:8080/
@@ -51,9 +60,15 @@ public class IndexController {
     }
 
     @PostMapping("/join")
-    public @ResponseBody String join(User user){
-        System.out.println("user = " + user);
-        return " join";
+    public String join(User user){
+
+        user.setRole("ROLE_USER");
+        String rowPassword = user.getPassword();
+        String encPassword = bCryptPasswordEncoder.encode(rowPassword);
+        user.setPassword(encPassword);
+
+        userRepository.save(user);
+        return "redirect:/loginForm";
     }
 
 

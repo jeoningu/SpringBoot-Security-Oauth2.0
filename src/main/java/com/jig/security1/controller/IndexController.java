@@ -3,6 +3,8 @@ package com.jig.security1.controller;
 import com.jig.security1.model.User;
 import com.jig.security1.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,17 +34,17 @@ public class IndexController {
     }
 
     @GetMapping("/user")
-    public @ResponseBody String user(){
+    public @ResponseBody String user() {
         return "user";
     }
 
     @GetMapping("/admin")
-    public @ResponseBody String admin(){
+    public @ResponseBody String admin() {
         return "admin";
     }
 
     @GetMapping("/manager")
-    public @ResponseBody String manager(){
+    public @ResponseBody String manager() {
         return "manager";
     }
 
@@ -50,17 +52,17 @@ public class IndexController {
     // 이유 : 스프링시큐리티가 낚아채서 안됨
     // 해결법 : SecurityConfig에서 설정 하면 login 후에는 낚아채지 않음 (아무 설정이나 해도 그런건지 특정 설정한 경우에만 그런건지 모르겠음)
     @GetMapping("/loginForm")
-    public String loginForm(){
+    public String loginForm() {
         return "loginForm";
     }
 
     @GetMapping("/joinForm")
-    public String joinForm(){
+    public String joinForm() {
         return "joinForm";
     }
 
     @PostMapping("/join")
-    public String join(User user){
+    public String join(User user) {
 
         user.setRole("ROLE_USER");
         String rowPassword = user.getPassword();
@@ -71,5 +73,15 @@ public class IndexController {
         return "redirect:/loginForm";
     }
 
+    @GetMapping("/adminInfo")
+    @Secured("ROLE_ADMIN")
+    public @ResponseBody String adminInfo() {
+        return "개인정보";
+    }
 
+    @GetMapping("/managerInfo")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')") // 함수가 시작되기 전에 실행된다
+    public @ResponseBody String managerInfo() {
+        return "개인정보";
+    }
 }

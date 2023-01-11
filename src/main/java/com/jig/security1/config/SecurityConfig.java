@@ -1,6 +1,6 @@
 package com.jig.security1.config;
 
-import com.jig.security1.oauth.PrincipalOauth2UserService;
+import com.jig.security1.config.oauth.PrincipalOauth2UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -44,12 +44,8 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 .loginPage("/loginForm")            // 인증이 필요한 URL에 접근하면 /loginForm으로 이동
                 .userInfoEndpoint()                         // 로그인 성공 후 사용자정보를 가져온다
                 .userService(principalOauth2UserService)   // 로그인 후 후처리하는 객체 등록  // 구글서버가 '엑세스 토큰', '사용자 프로필 정보'를 반환
-        ;
-
-
+                ;
 //                .authorizationEndpoint()
 //                .baseUri("/login/oauth2/authorization");
-
-
     }
 }

@@ -1,6 +1,6 @@
-package com.jig.security1.oauth;
+package com.jig.security1.config.oauth;
 
-import com.jig.security1.auth.PrincipalDetails;
+import com.jig.security1.config.auth.PrincipalDetails;
 import com.jig.security1.model.User;
 import com.jig.security1.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

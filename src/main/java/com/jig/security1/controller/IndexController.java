@@ -1,6 +1,6 @@
 package com.jig.security1.controller;
 
-import com.jig.security1.auth.PrincipalDetails;
+import com.jig.security1.config.auth.PrincipalDetails;
 import com.jig.security1.model.User;
 import com.jig.security1.repository.UserRepository;
 

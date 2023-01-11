@@ -1,4 +1,4 @@
-package com.jig.security1.auth;
+package com.jig.security1.config.auth;
 
 import com.jig.security1.model.User;
 import lombok.Data;

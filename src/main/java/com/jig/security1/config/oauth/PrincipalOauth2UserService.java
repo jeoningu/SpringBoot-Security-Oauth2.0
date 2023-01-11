@@ -1,8 +1,13 @@
 package com.jig.security1.config.oauth;
 
 import com.jig.security1.config.auth.PrincipalDetails;
+import com.jig.security1.config.oauth.provider.FacebookUserInfo;
+import com.jig.security1.config.oauth.provider.GoogleUserInfo;
+import com.jig.security1.config.oauth.provider.OAuth2UserInfo;
 import com.jig.security1.model.User;
 import com.jig.security1.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -13,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
+
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -58,18 +65,26 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             providerId = super.loadUser(userRequest).getAttributes().get("sub")
          */
 
-        // 회원등록이 안됐으면 회원가입 진행
+        // OAuth2 종류에 따른 데이터 맵핑
         OAuth2User oAuth2User = super.loadUser(userRequest);
-
         String provider = userRequest.getClientRegistration().getRegistrationId();
-        String providerId = oAuth2User.getAttribute("sub");
+        OAuth2UserInfo oAuth2UserInfo = null;
+        if ("google".equals(provider)) {
+            oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
+        } else if ("facebook".equals(provider)) {
+            oAuth2UserInfo = new FacebookUserInfo(oAuth2User.getAttributes());
+        } else {
+            logger.error("지원하지 않는 OAuth2입니다.");
+        }
+
+        String providerId = oAuth2UserInfo.getProviderId();
         String username = provider + "_" + providerId;
         // TODO: OAuth2 회원가입인 경우 패스워드에 특정값을 넣어줘서 노출되는 경우 모든 OAuth 회원이 노출되게 되는 문제가 있음. 해결 필요함
         String password = bCryptPasswordEncoder.encode("특정값");
-        String email = oAuth2User.getAttribute("email");
+        String email = oAuth2UserInfo.getEmail();
         String role = "ROLE_USER";
 
-
+        // 회원등록이 안됐으면 회원가입
         User userEntity = userRepository.findByUsername(username);
         if (null == userEntity) {
             userEntity = User.builder()
@@ -81,6 +96,9 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .providerId(providerId)
                     .build();
             userRepository.save(userEntity);
+            logger.info("존재하지 않는 OAuth2회원입니다. 자동으로 회원가입됩니다.");
+        } else {
+            logger.info("이미 가입된 OAuth2 회원입니다.");
         }
 
         return new PrincipalDetails(userEntity, oAuth2User.getAttributes());

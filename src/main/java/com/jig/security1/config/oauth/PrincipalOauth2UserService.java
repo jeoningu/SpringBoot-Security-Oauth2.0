@@ -3,6 +3,7 @@ package com.jig.security1.config.oauth;
 import com.jig.security1.config.auth.PrincipalDetails;
 import com.jig.security1.config.oauth.provider.FacebookUserInfo;
 import com.jig.security1.config.oauth.provider.GoogleUserInfo;
+import com.jig.security1.config.oauth.provider.NaverUserInfo;
 import com.jig.security1.config.oauth.provider.OAuth2UserInfo;
 import com.jig.security1.model.User;
 import com.jig.security1.repository.UserRepository;
@@ -15,6 +16,8 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
@@ -46,13 +49,14 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
      */
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        /*
+
+        System.out.println(" =================== loadUser에서 데이터 확인 =================== ");
         System.out.println("userRequest = " + userRequest);
         System.out.println("userRequest.getClientRegistration() = " + userRequest.getClientRegistration());
         System.out.println("userRequest.getAccessToken() = " + userRequest.getAccessToken());
         System.out.println("userRequest.getAccessToken().getTokenValue() = " + userRequest.getAccessToken().getTokenValue());
         System.out.println("super.loadUser(userRequest).getAttributes() = " + super.loadUser(userRequest).getAttributes());
-        */
+
 
         /*
             [회원가입 정보]
@@ -71,10 +75,15 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         OAuth2UserInfo oAuth2UserInfo = null;
         if ("google".equals(provider)) {
             oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
+            logger.info("google OAuth2 로그인 요청 입니다.");
         } else if ("facebook".equals(provider)) {
             oAuth2UserInfo = new FacebookUserInfo(oAuth2User.getAttributes());
+            logger.info("facebook OAuth2 로그인 요청 입니다.");
+        } else if ("naver".equals(provider)) {
+            oAuth2UserInfo = new NaverUserInfo((Map)oAuth2User.getAttributes().get("response"));
+            logger.info("naver OAuth2 로그인 요청 입니다.");
         } else {
-            logger.error("지원하지 않는 OAuth2입니다.");
+            logger.error("지원하지 않는 OAuth2입니다. ");
         }
 
         String providerId = oAuth2UserInfo.getProviderId();

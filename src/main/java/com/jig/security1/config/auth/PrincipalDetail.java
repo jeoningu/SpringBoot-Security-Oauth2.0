@@ -32,7 +32,7 @@ import java.util.Map;
  *    ===> public class PrincipalDetails implements UserDetails, OAuths2User{}
  */
 @Data
-public class PrincipalDetails implements UserDetails, OAuth2User {
+public class PrincipalDetail implements UserDetails, OAuth2User {
 
     private User user;
 
@@ -42,7 +42,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
      * 일반 로그인할 때 사용되는 생성자
      * @param user
      */
-    public PrincipalDetails(User user) {
+    public PrincipalDetail(User user) {
         this.user = user;
     }
 
@@ -51,7 +51,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
      * @param user
      * @param attributes
      */
-    public PrincipalDetails(User user, Map<String, Object> attributes) {
+    public PrincipalDetail(User user, Map<String, Object> attributes) {
         this.user = user;
         this.attributes = attributes;
     }

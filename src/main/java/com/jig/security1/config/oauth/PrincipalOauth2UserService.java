@@ -1,6 +1,6 @@
 package com.jig.security1.config.oauth;
 
-import com.jig.security1.config.auth.PrincipalDetails;
+import com.jig.security1.config.auth.PrincipalDetail;
 import com.jig.security1.config.oauth.provider.FacebookUserInfo;
 import com.jig.security1.config.oauth.provider.GoogleUserInfo;
 import com.jig.security1.config.oauth.provider.NaverUserInfo;
@@ -110,6 +110,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             logger.info("이미 가입된 OAuth2 회원입니다.");
         }
 
-        return new PrincipalDetails(userEntity, oAuth2User.getAttributes());
+        return new PrincipalDetail(userEntity, oAuth2User.getAttributes());
     }
 }

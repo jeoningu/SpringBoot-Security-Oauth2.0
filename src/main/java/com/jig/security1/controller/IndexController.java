@@ -1,6 +1,6 @@
 package com.jig.security1.controller;
 
-import com.jig.security1.config.auth.PrincipalDetails;
+import com.jig.security1.config.auth.PrincipalDetail;
 import com.jig.security1.model.User;
 import com.jig.security1.repository.UserRepository;
 
@@ -39,8 +39,8 @@ public class IndexController {
     }
 
     @GetMapping("/user")
-    public @ResponseBody String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        System.out.println("user - principalDetails.getUser() = " + principalDetails.getUser());
+    public @ResponseBody String user(@AuthenticationPrincipal PrincipalDetail principalDetail) {
+        System.out.println("user - principalDetails.getUser() = " + principalDetail.getUser());
         return "user";
     }
 
@@ -114,10 +114,10 @@ public class IndexController {
      */
     @GetMapping("/test/login")
     public @ResponseBody String testLogin(Authentication authentication,
-                                          @AuthenticationPrincipal PrincipalDetails userDetails) {
+                                          @AuthenticationPrincipal PrincipalDetail userDetails) {
         System.out.println("======================IndexController.testLogin======================");
         // 1. Authentication authentication
-        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+        PrincipalDetail principal = (PrincipalDetail) authentication.getPrincipal();
         System.out.println("authentication principalDetails user 정보 = " + principal.getUser());
 
         // 2. @AuthenticationPrincipal PrincipalDetails userDetails

@@ -32,7 +32,7 @@ public class PrincipleService implements UserDetailsService {
         if(user == null) {
             return null;
         }else {
-            return new PrincipalDetails(user);
+            return new PrincipalDetail(user);
         }
     }
 }
